@@ -208,7 +208,6 @@ void pressed_char(char ch) {
 }
 
 void write_word(char *word) {
-    location_by_coords(1, 1);
     int i;
     for (i = 0; word[i] != '\0'; i++) {
         write_by_ascii(word[i]);
@@ -232,13 +231,6 @@ void char_test() {
             }
         }
     }
-}
-
-void display_window_size(char win) {
-    location_by_coords(2, 14);
-    write_by_ascii('N');
-    write_by_ascii('=');
-    write_by_ascii(win);
 }
 
 void display_temp(float temp) {
@@ -291,4 +283,66 @@ void pattern_name(int pattern) {
                     write_word("set pattern");
                     break;
             }
+}
+
+void display_mode_string(int state) {
+    location_by_coords(1, 1);
+    switch (state) {
+        case 0:
+            write_word("heat ");
+            break;
+        case 1:
+            write_word("cool ");
+            break;
+        case 2:
+            write_word("off  ");
+            break;
+        case 3:
+            write_word("match");
+            break;
+        case 4:
+            write_word("set  ");
+            break;
+    }
+}
+
+void display_ambient_temperature(char tens, char ones, char tenths) {
+    location_by_coords(1, 9);
+    write_by_ascii('A');
+    write_by_ascii(':');
+    write_by_ascii(tens);
+    write_by_ascii(ones);
+    write_by_ascii('.');
+    write_by_ascii(tenths);
+    write_character(0b1010, 0b0101);
+    write_by_ascii('C');
+}
+
+void display_plant_temperature(char tens, char ones, char tenths) {
+    location_by_coords(2, 9);
+    write_by_ascii('P');
+    write_by_ascii(':');
+    write_by_ascii(tens);
+    write_by_ascii(ones);
+    write_by_ascii('.');
+    write_by_ascii(tenths);
+    write_character(0b1010, 0b0101);
+    write_by_ascii('C');
+}
+
+void display_window_size(int size) {
+    location_by_coords(2, 1);
+    write_by_ascii(size+48);
+}
+
+
+void display_time_in_state(int time) {
+    location_by_coords(2, 3);
+    int ones = time % 10;
+    int tens = (time / 10) % 10;
+    int hund = (time / 100) % 10;
+    write_by_ascii(hund+48);
+    write_by_ascii(tens+48);
+    write_by_ascii(ones+48);
+    write_by_ascii('s');
 }
